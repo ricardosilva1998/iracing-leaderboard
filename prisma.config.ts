@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
-const dbUrl = process.env.RAILWAY_ENVIRONMENT
-  ? "file:/app/data/iracing.db"
+const dbUrl = process.env.DATABASE_PATH
+  ? `file:${process.env.DATABASE_PATH}`
   : (process.env.DATABASE_URL || "file:./dev.db");
 
 export default defineConfig({
