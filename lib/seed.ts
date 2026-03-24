@@ -1,10 +1,13 @@
 import { PrismaClient } from "../app/generated/prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import path from "path";
 import { _getAllDriversForSeed } from "./mock-data";
 
-const dbPath = path.join(process.cwd(), "dev.db");
-const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
+function getDbPath() {
+  if (process.env.RAILWAY_ENVIRONMENT) return "/app/data/iracing.db";
+  return process.env.DATABASE_URL?.replace("file:", "") || "./dev.db";
+}
+
+const adapter = new PrismaBetterSqlite3({ url: `file:${getDbPath()}` });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {

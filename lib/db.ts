@@ -1,11 +1,19 @@
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import path from "path";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
+function getDbPath() {
+  // In production (Railway), use the mounted volume
+  if (process.env.RAILWAY_ENVIRONMENT) {
+    return "/app/data/iracing.db";
+  }
+  // Locally, use the project root
+  return process.env.DATABASE_URL?.replace("file:", "") || "./dev.db";
+}
+
 function createPrismaClient() {
-  const dbPath = path.join(process.cwd(), "dev.db");
+  const dbPath = getDbPath();
   const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
   return new PrismaClient({ adapter });
 }
