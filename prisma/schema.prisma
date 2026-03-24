@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Driver {
+  id              Int      @id @default(autoincrement())
+  custId          Int      @unique
+  displayName     String
+  memberSince     String?
+  clubName        String?
+  countryCode     String?
+  iRatingRoad     Int      @default(0)
+  iRatingOval     Int      @default(0)
+  iRatingDirtRoad Int      @default(0)
+  iRatingDirtOval Int      @default(0)
+  srRoad          Float    @default(0)
+  srOval          Float    @default(0)
+  srDirtRoad      Float    @default(0)
+  srDirtOval      Float    @default(0)
+  licenseRoad     String?
+  licenseOval     String?
+  licenseDirtRoad String?
+  licenseDirtOval String?
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+
+  @@index([iRatingRoad])
+  @@index([iRatingOval])
+  @@index([iRatingDirtRoad])
+  @@index([iRatingDirtOval])
+  @@index([displayName])
+}
+
+model IngestLog {
+  id           Int      @id @default(autoincrement())
+  categoryId   Int
+  driversFound Int
+  status       String
+  error        String?
+  createdAt    DateTime @default(now())
+}
