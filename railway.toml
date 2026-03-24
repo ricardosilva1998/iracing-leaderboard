@@ -2,6 +2,9 @@
 builder = "nixpacks"
 buildCommand = "npm install && npx prisma generate && npx prisma db push && npx tsx lib/seed.ts && npm run build"
 
+[build.nixpacks]
+nixPackages = ["nodejs_22", "npm-10_x"]
+
 [deploy]
 startCommand = "npm run start"
 healthcheckPath = "/"
